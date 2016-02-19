@@ -13,6 +13,7 @@
         <module>dolphin-service</module>
         <module>dolphin-robot-service</module>
         <module>dolphin-util</module>
+        <module>dolphin-backend-web</module>
     </modules>
 
 
