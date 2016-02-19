@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dolphin-util</artifactId>
+    <artifactId>dolphin-service-util</artifactId>
 
     <properties>
         <lombok.version>1.16.4</lombok.version>
@@ -32,6 +32,11 @@
             <version>${lombok.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
         <!--测试工具-->
         <dependency>
             <groupId>junit</groupId>

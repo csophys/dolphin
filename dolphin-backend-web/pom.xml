@@ -9,14 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dolphin-service</artifactId>
+    <artifactId>dolphin-backend-web</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>dolphin</groupId>
-            <artifactId>dolphin-service-util</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
 
 </project>
