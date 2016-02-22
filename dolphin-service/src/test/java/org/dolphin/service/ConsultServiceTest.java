@@ -1,7 +1,6 @@
 package org.dolphin.service;
 
 import org.dolphin.entity.Consult;
-import org.dolphin.enums.ChannelTypeEnum;
 import org.dolphin.test.Base;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,10 +23,8 @@ public class ConsultServiceTest extends Base {
 
     private Consult buildConsult() {
         Consult consult = new Consult();
-        consult.setName("在线某咨询分类");
-        consult.setChannelType(ChannelTypeEnum.H5.getChannelType());
+        //TODO:not null field set
         consult.setCode("csophys");
-        consult.setSkillId(2);
         return consult;
     }
 
@@ -55,12 +52,11 @@ public class ConsultServiceTest extends Base {
         int id = consultService.insert(consult);
         Consult consultToUpdate = new Consult();
         BeanUtils.copyProperties(consult, consultToUpdate);
-        consultToUpdate.setName("changedCsophys");
+        consultToUpdate.setCode("changedCsophys");
         consultService.updateById(id, consultToUpdate);
         Consult newConsult = consultService.getById(id);
         Assert.assertTrue(consult.getId().equals(newConsult.getId()));
-        Assert.assertTrue(consult.getSkillId().equals(newConsult.getSkillId()));
-        Assert.assertFalse(consult.getName().equals(newConsult.getName()));
+        Assert.assertFalse(consult.getCode().equals(newConsult.getCode()));
     }
 
     @Test
