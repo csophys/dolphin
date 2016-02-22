@@ -6,7 +6,6 @@ import org.dolphin.test.Base;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.BeanUtils;
-import org.springframework.test.annotation.Rollback;
 
 import javax.annotation.Resource;
 
@@ -46,12 +45,12 @@ public class ConsultServiceTest extends Base {
 
     }
 
-    @Test @Rollback(false)
+    @Test
     public void testUpdateById() throws Exception {
         Consult consult = buildConsult();
         int id = consultService.insert(consult);
         Consult consultToUpdate = new Consult();
-        BeanUtils.copyProperties(consult,consultToUpdate);
+        BeanUtils.copyProperties(consult, consultToUpdate);
         consultToUpdate.setName("changedCsophys");
         consultService.updateById(id, consultToUpdate);
         Consult newConsult = consultService.getById(id);
@@ -62,6 +61,11 @@ public class ConsultServiceTest extends Base {
 
     @Test
     public void testDeleteById() throws Exception {
-
+        Consult consult = buildConsult();
+        int id = consultService.insert(consult);
+        Assert.assertTrue(consultService.getById(id) != null);
+        int rows = consultService.deleteById(id);
+        Assert.assertTrue(rows > 0);
+        Assert.assertTrue(consultService.getById(id) == null);
     }
 }

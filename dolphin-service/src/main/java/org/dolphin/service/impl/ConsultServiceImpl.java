@@ -39,6 +39,6 @@ public class ConsultServiceImpl implements ConsultService {
 
     @Override
     public int deleteById(int id) {
-        return 0;
+        return consultDao.deleteById(id);
     }
 }
