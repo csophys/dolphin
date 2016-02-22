@@ -7,12 +7,12 @@ import lombok.Data;
  */
 @Data
 public class Consult extends Entity {
-    private String Code;
-    private String Name;
-    private Integer ParentId;
-    private Integer SkillId;
-    private Integer IsDelete;
-    private Integer Rank;
-    private String IconUrl;
-    private Integer ChannelType;
+    private String code;
+    private String name;
+    private Integer parentId;
+    private Integer skillId;
+    private Integer isDelete;
+    private Integer rank;
+    private String iconUrl;
+    private Integer channelType;
 }

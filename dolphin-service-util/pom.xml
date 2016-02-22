@@ -21,6 +21,7 @@
         <commons-pool.version>1.6</commons-pool.version>
         <mysql-connector-java.version>5.1.26</mysql-connector-java.version>
         <c3p0.version>0.9.1.2</c3p0.version>
+        <freemarker.version>2.3.21</freemarker.version>
     </properties>
 
 
@@ -95,6 +96,13 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql-connector-java.version}</version>
+        </dependency>
+
+        <!--模板引擎-->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>${freemarker.version}</version>
         </dependency>
     </dependencies>
 
