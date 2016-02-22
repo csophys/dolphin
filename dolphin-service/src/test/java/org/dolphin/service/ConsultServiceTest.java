@@ -17,8 +17,7 @@ public class ConsultServiceTest extends Base {
 
     @Test
     public void testGetById() throws Exception {
-        Consult consult = buildConsult();
-        int result = consultService.insert(consult);
+        int result = insertConsult();
         Assert.assertTrue(result > 0);
         Assert.assertTrue(consultService.getById(result) != null);
     }
@@ -34,15 +33,20 @@ public class ConsultServiceTest extends Base {
 
     @Test
     public void insert() throws Exception {
-        Consult consult = buildConsult();
-        int id = consultService.insert(consult);
+        int id = insertConsult();
         Assert.assertTrue(id > 0);
+    }
+
+    private int insertConsult() {
+        Consult consult = buildConsult();
+        return consultService.insert(consult);
     }
 
 
     @Test
     public void testGetByField() throws Exception {
-
+        int id = insertConsult();
+        Assert.assertTrue(consultService.getByField("id", String.valueOf(id)).size() > 0);
     }
 
     @Test
@@ -61,8 +65,7 @@ public class ConsultServiceTest extends Base {
 
     @Test
     public void testDeleteById() throws Exception {
-        Consult consult = buildConsult();
-        int id = consultService.insert(consult);
+        int id = insertConsult();
         Assert.assertTrue(consultService.getById(id) != null);
         int rows = consultService.deleteById(id);
         Assert.assertTrue(rows > 0);

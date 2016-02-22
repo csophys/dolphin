@@ -29,7 +29,7 @@ public class ConsultServiceImpl implements ConsultService {
 
     @Override
     public List<Consult> getByField(String fieldName, String fieldValue) {
-        return null;
+        return consultDao.getByField(fieldName,fieldValue);
     }
 
     @Override
