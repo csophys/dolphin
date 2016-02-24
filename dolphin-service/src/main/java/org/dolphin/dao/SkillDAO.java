@@ -11,7 +11,7 @@ import java.util.List;
 * Created by csophys with template on 2016-2-24.
 */
 public interface SkillDAO{
-    void insert(Skill entity);
+    int insert(Skill entity);
 
     @Select("select * from Skill where id = #{id}")
     Skill getById(int id);

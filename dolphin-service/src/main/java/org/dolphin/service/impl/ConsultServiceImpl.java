@@ -1,6 +1,6 @@
 package org.dolphin.service.impl;
 
-import org.dolphin.dao.ConsultDao;
+import org.dolphin.dao.ConsultDAO;
 import org.dolphin.entity.Consult;
 import org.dolphin.service.ConsultService;
 import org.springframework.stereotype.Service;
@@ -14,31 +14,31 @@ import java.util.List;
 @Service
 public class ConsultServiceImpl implements ConsultService {
     @Resource
-    ConsultDao consultDao;
+    ConsultDAO consultDAO;
 
     @Override
     public int insert(Consult consult) {
-        consultDao.insert(consult);
+        consultDAO.insert(consult);
         return consult.getId();
     }
 
     @Override
     public Consult getById(int id) {
-        return consultDao.getById(id);
+        return consultDAO.getById(id);
     }
 
     @Override
     public List<Consult> getByField(String fieldName, String fieldValue) {
-        return consultDao.getByField(fieldName,fieldValue);
+        return consultDAO.getByField(fieldName, fieldValue);
     }
 
     @Override
     public int updateById(int id, Consult consult) {
-        return consultDao.updateById(id,consult);
+        return consultDAO.updateById(id,consult);
     }
 
     @Override
     public int deleteById(int id) {
-        return consultDao.deleteById(id);
+        return consultDAO.deleteById(id);
     }
 }

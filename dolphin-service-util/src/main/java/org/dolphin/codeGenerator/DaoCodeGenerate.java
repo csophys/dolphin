@@ -18,7 +18,7 @@ public class DaoCodeGenerate {
     private static Logger logger = Logger.getLogger(DaoCodeGenerate.class);
 
     private enum classType {
-        DAO, SERVICE, DAO_TEST, SQLMAP, SERVICE_IMPL
+        DAO, SERVICE, DAO_TEST, SQLMAP, SERVICE_TEST, SERVICE_IMPL
     }
 
     public static void generateByJavaBean(Class clazz) {
@@ -108,7 +108,7 @@ public class DaoCodeGenerate {
 
     private static void generateSqlmap(Class clazz, File sourceDirectory, Configuration configuration) {
         String sqlmapPath = getResourceDirectory(sourceDirectory) + "/config/mybatis/sqlmap/" + clazz.getSimpleName() + ".xml";
-        generateFileByTemplate(clazz,configuration,sqlmapPath,classType.SQLMAP);
+        generateFileByTemplate(clazz, configuration, sqlmapPath, classType.SQLMAP);
     }
 
 
@@ -128,7 +128,15 @@ public class DaoCodeGenerate {
 
     private static String getPackageName(Class clazz, classType classType) {
         String originPackage = "\\.[a-zA-Z]*\\." + clazz.getSimpleName();
-        return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.toString().toLowerCase()));
+        switch (classType) {
+            case DAO_TEST:
+                return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.DAO.toString().toLowerCase()));
+            case SERVICE_TEST:
+                return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.toString().toLowerCase()));
+            default:
+                return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.toString().toLowerCase()));
+        }
+
     }
 
     private static String getDaoSimpleName(Class clazz) {
@@ -167,6 +175,9 @@ public class DaoCodeGenerate {
         createTempFTLFile(clazz, serviceImplFileName);
         logger.info("成功创建文件" + DATA_FTL + serviceImplFileName);
 
+        String daoTestFileName = "/daoTest.ftl";
+        createTempFTLFile(clazz, daoTestFileName);
+        logger.info("成功创建文件" + DATA_FTL + daoTestFileName);
 
         String serviceTestFileName = "/serviceTest.ftl";
         createTempFTLFile(clazz, serviceTestFileName);

@@ -10,8 +10,8 @@ import java.util.List;
 /**
  * Created by csophys on 16/2/19.
  */
-public interface ConsultDao {
-    void insert(Consult consult);
+public interface ConsultDAO {
+    int insert(Consult consult);
 
     @Select("select * from Consult where id = #{id}")
     Consult getById(int id);

@@ -11,7 +11,7 @@ import java.util.List;
 * Created by csophys with template on ${.now?date}.
 */
 public interface ${daoSimple}{
-    void insert(${entitySimple} entity);
+    int insert(${entitySimple} entity);
 
     @Select("select * from ${entitySimple} where id = ${r'#{id}'}")
     ${entitySimple} getById(int id);

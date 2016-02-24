@@ -13,7 +13,7 @@ public interface SkillService {
 
     Skill getById(int id);
 
-    List<Skill> getByField(String fieldValue);
+    List<Skill> getByField(String fieldName,String fieldValue);
 
     int updateById(int id, Skill entity);
 

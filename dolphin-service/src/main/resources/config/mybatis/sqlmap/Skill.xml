@@ -25,12 +25,12 @@
         </selectKey>
     </insert>
 
-    <update id="update">
+    <update id="updateById">
         UPDATE  Skill
         SET
-        Name = #{Name},
-        IsDelete = #{IsDelete},
-        DeptId = #{DeptId}
+        Name = #{entity.Name},
+        IsDelete = #{entity.IsDelete},
+        DeptId = #{entity.DeptId}
         WHERE Id = #{id};
     </update>
 

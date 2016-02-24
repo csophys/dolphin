@@ -25,11 +25,11 @@
         </selectKey>
     </insert>
 
-    <update id="update">
+    <update id="updateById">
         UPDATE  ${entitySimple}
         SET
         <#list entityFields as field>
-        ${field.name} = ${r'#{'}${field.name}}<#if field_has_next>,</#if>
+        ${field.name} = ${r'#{'}entity.${field.name}}<#if field_has_next>,</#if>
         </#list>
         WHERE Id = ${r'#{id}'};
     </update>
