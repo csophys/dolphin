@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.dolphin.dao.SkillDAO">
+
+    <insert id="insert" parameterType="org.dolphin.entity.Skill" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO Skill
+        (
+        AddTime,
+        Name,
+        IsDelete,
+        DeptId
+        )
+        VALUES
+        (
+        now(),
+        #{Name},
+        #{IsDelete},
+        #{DeptId}
+        );
+        <selectKey resultType="int" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="update">
+        UPDATE  Skill
+        SET
+        Name = #{Name},
+        IsDelete = #{IsDelete},
+        DeptId = #{DeptId}
+        WHERE Id = #{id};
+    </update>
+
+</mapper>
