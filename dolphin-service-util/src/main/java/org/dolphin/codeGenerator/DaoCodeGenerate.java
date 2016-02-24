@@ -18,7 +18,7 @@ public class DaoCodeGenerate {
     private static Logger logger = Logger.getLogger(DaoCodeGenerate.class);
 
     private enum classType {
-        DAO, SERVICE, SERVICE_IMPL
+        DAO, SERVICE, DAO_TEST, SQLMAP, SERVICE_IMPL
     }
 
     public static void generateByJavaBean(Class clazz) {
@@ -58,14 +58,17 @@ public class DaoCodeGenerate {
     }
 
     private static void generateFileByTemplate(Class clazz, Configuration configuration, String filePath, classType classType) {
-        File serviceFile = new File(filePath);
+        File file = new File(filePath);
         try {
-            if (serviceFile.exists()) {
+            if (file.exists()) {
                 logger.warn(classType + "类已经存在");
                 return;
             }
 
-            serviceFile.createNewFile();
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            file.createNewFile();
             Template template = null;
             try {
                 template = configuration.getTemplate(underlineToHump(classType.toString().toLowerCase()) + ".ftl");
@@ -77,7 +80,11 @@ public class DaoCodeGenerate {
             map.put("entitySimple", clazz.getSimpleName());
             map.put("entity", clazz.getName());
             map.put("daoSimple", getDaoSimpleName(clazz));
-            Writer writer = new OutputStreamWriter(new FileOutputStream(serviceFile));
+            map.put("entityID", getEntityID(clazz));
+            map.put("daoID", getDaoID(clazz));
+            map.put("dao", getPackageName(clazz, classType.DAO) + "." + getDaoSimpleName(clazz));
+            map.put("entityFields", clazz.getDeclaredFields());
+            Writer writer = new OutputStreamWriter(new FileOutputStream(file));
             try {
                 template.process(map, writer);
                 writer.flush();
@@ -92,41 +99,7 @@ public class DaoCodeGenerate {
     private static void generateDaoTest(Class clazz, File sourceDirectory, Configuration configuration) {
         File testSourceDirectory = getTestSourceDirectory(sourceDirectory);
         String daoTestPath = testSourceDirectory + "/" + getPackageName(clazz, classType.DAO).replace(".", "/") + "/" + getDaoSimpleName(clazz) + "Test.java";
-        File daoTestFile = new File(daoTestPath);
-        if (daoTestFile.exists()) {
-            logger.warn("daoTest文件已经存在");
-            return;
-        } else {
-            try {
-                daoTestFile.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        Template template = null;
-
-        try {
-            template = configuration.getTemplate("daoTest.ftl");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        HashMap<Object, Object> map = new HashMap<Object, Object>();
-        map.put("package", getPackageName(clazz, classType.DAO));
-        map.put("entitySimple", clazz.getSimpleName());
-        map.put("entity", clazz.getName());
-        map.put("daoSimple", getDaoSimpleName(clazz));
-        map.put("entityID", getEntityID(clazz));
-        map.put("daoID", getDaoID(clazz));
-        map.put("dao", getPackageName(clazz, classType.DAO) + "." + getDaoSimpleName(clazz));
-        try {
-            template.process(map, new OutputStreamWriter(new FileOutputStream(daoTestFile)));
-        } catch (TemplateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(daoTestPath);
+        generateFileByTemplate(clazz, configuration, daoTestPath, classType.DAO_TEST);
     }
 
     private static File getTestSourceDirectory(File sourceDirectory) {
@@ -135,37 +108,7 @@ public class DaoCodeGenerate {
 
     private static void generateSqlmap(Class clazz, File sourceDirectory, Configuration configuration) {
         String sqlmapPath = getResourceDirectory(sourceDirectory) + "/config/mybatis/sqlmap/" + clazz.getSimpleName() + ".xml";
-        File sqlmapFile = new File(sqlmapPath);
-
-        if (sqlmapFile.exists()) {
-            logger.warn("sqlmap已经存在");
-            return;
-        }
-        try {
-            sqlmapFile.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Template template = null;
-
-        try {
-            template = configuration.getTemplate("sqlmap.ftl");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        HashMap<Object, Object> map = new HashMap<Object, Object>();
-        map.put("entity", clazz.getName());
-        map.put("entitySimple", clazz.getSimpleName());
-        map.put("entityFields", clazz.getDeclaredFields());
-        map.put("dao", getPackageName(clazz, classType.DAO) + "." + getDaoSimpleName(clazz));
-        try {
-            template.process(map, new OutputStreamWriter(new FileOutputStream(sqlmapFile)));
-        } catch (TemplateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        generateFileByTemplate(clazz,configuration,sqlmapPath,classType.SQLMAP);
     }
 
 
@@ -185,15 +128,7 @@ public class DaoCodeGenerate {
 
     private static String getPackageName(Class clazz, classType classType) {
         String originPackage = "\\.[a-zA-Z]*\\." + clazz.getSimpleName();
-        switch (classType) {
-            case DAO:
-            case SERVICE:
-            case SERVICE_IMPL:
-                return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.toString().toLowerCase()));
-            default:
-                throw new IllegalArgumentException("没有改类型的packageName");
-        }
-
+        return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.toString().toLowerCase()));
     }
 
     private static String getDaoSimpleName(Class clazz) {
