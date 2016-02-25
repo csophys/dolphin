@@ -1,6 +1,6 @@
-package org.dolphin.service;
+package ${package};
 
-import org.dolphin.entity.Consult;
+import ${entity};
 import org.dolphin.test.Base;
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,62 +9,60 @@ import org.springframework.beans.BeanUtils;
 import javax.annotation.Resource;
 
 
-public class ConsultServiceTest extends Base {
+public class ${serviceSimple}Test extends Base {
 
     @Resource
-    ConsultService consultService;
+    ${serviceSimple} service;
 
     @Test
     public void testGetById() throws Exception {
-        int result = insertConsult();
+        int result = insert${entitySimple}();
         Assert.assertTrue(result > 0);
-        Assert.assertTrue(consultService.getById(result) != null);
+        Assert.assertTrue(service.getById(result) != null);
     }
 
-    private Consult buildConsult() {
-        Consult consult = new Consult();
+    private ${entitySimple} build${entitySimple}() {
+        ${entitySimple} entity = new ${entitySimple}();
         //TODO:not null field set
-        consult.setCode("csophys");
-        return consult;
+        return entity;
     }
 
     @Test
     public void insert() throws Exception {
-        int id = insertConsult();
+        int id = insert${entitySimple}();
         Assert.assertTrue(id > 0);
     }
 
-    private int insertConsult() {
-        Consult consult = buildConsult();
-        return consultService.insert(consult);
+    private int insert${entitySimple}() {
+        ${entitySimple} entity = build${entitySimple}();
+        return service.insert(entity);
     }
 
 
     @Test
     public void testGetByField() throws Exception {
-        int id = insertConsult();
-        Assert.assertTrue(consultService.getByField("id", String.valueOf(id)).size() > 0);
+        int id = insert${entitySimple}();
+        Assert.assertTrue(service.getByField("id", String.valueOf(id)).size() > 0);
     }
 
     @Test
     public void testUpdateById() throws Exception {
-        Consult consult = buildConsult();
-        int id = consultService.insert(consult);
-        Consult consultToUpdate = new Consult();
-        BeanUtils.copyProperties(consult, consultToUpdate);
-        consultToUpdate.setCode("changedCsophys");
-        consultService.updateById(id, consultToUpdate);
-        Consult newConsult = consultService.getById(id);
-        Assert.assertTrue(consult.getId().equals(newConsult.getId()));
-        Assert.assertFalse(consult.getCode().equals(newConsult.getCode()));
+        ${entitySimple} entity = build${entitySimple}();
+        int id = service.insert(entity);
+        ${entitySimple} entityToUpdate = new ${entitySimple}();
+        BeanUtils.copyProperties(entity, entityToUpdate);
+        //field to update
+        service.updateById(id, entityToUpdate);
+        ${entitySimple} new${entitySimple} = service.getById(id);
+        Assert.assertTrue(entity.getId().equals(new${entitySimple}.getId()));
     }
 
     @Test
     public void testDeleteById() throws Exception {
-        int id = insertConsult();
-        Assert.assertTrue(consultService.getById(id) != null);
-        int rows = consultService.deleteById(id);
+        int id = insert${entitySimple}();
+        Assert.assertTrue(service.getById(id) != null);
+        int rows = service.deleteById(id);
         Assert.assertTrue(rows > 0);
-        Assert.assertTrue(consultService.getById(id) == null);
+        Assert.assertTrue(service.getById(id) == null);
     }
 }

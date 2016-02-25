@@ -45,12 +45,20 @@ public class DaoCodeGenerate {
         generateService(clazz, file, configuration);
         //生成serviceImpl
         generateServiceImpl(clazz, file, configuration);
+        logger.info("service生成成功！");
         //生成test
         generateDaoTest(clazz, sourceDirectory, configuration);
         logger.info("dao test生成成功！");
-
         //生成service test
+        generateServiceTest(clazz, sourceDirectory, configuration);
+        logger.info("service test生成成功！");
 
+    }
+
+    private static void generateServiceTest(Class clazz, File sourceDirectory, Configuration configuration) {
+        File testSourceDirectory = getTestSourceDirectory(sourceDirectory);
+        String daoTestPath = testSourceDirectory + "/" + getPackageName(clazz, classType.SERVICE).replace(".", "/") + "/" + getServiceSimpleName(clazz) + "Test.java";
+        generateFileByTemplate(clazz, configuration, daoTestPath, classType.SERVICE_TEST);
     }
 
     private static void generateServiceImpl(Class clazz, File file, Configuration configuration) {
@@ -144,7 +152,7 @@ public class DaoCodeGenerate {
             case DAO_TEST:
                 return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.DAO.toString().toLowerCase()));
             case SERVICE_TEST:
-                return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.toString().toLowerCase()));
+                return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.SERVICE.toString().toLowerCase()));
             case SERVICE_IMPL:
                 return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.SERVICE.toString().toLowerCase())+".impl");
             default:
