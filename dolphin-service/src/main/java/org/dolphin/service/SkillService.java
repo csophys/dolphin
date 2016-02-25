@@ -5,7 +5,7 @@ import org.dolphin.entity.Skill;
 import java.util.List;
 
 /**
-* Created by csophys with template on 2016-2-24.
+* Created by csophys with template on 2016-2-25.
 */
 public interface SkillService {
 
