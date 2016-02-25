@@ -44,12 +44,18 @@ public class DaoCodeGenerate {
         //生成service
         generateService(clazz, file, configuration);
         //生成serviceImpl
+        generateServiceImpl(clazz, file, configuration);
         //生成test
         generateDaoTest(clazz, sourceDirectory, configuration);
         logger.info("dao test生成成功！");
 
         //生成service test
 
+    }
+
+    private static void generateServiceImpl(Class clazz, File file, Configuration configuration) {
+        String serviceImplFilePath = file.getParent() + "/" + classType.SERVICE.toString().toLowerCase() + "/impl/" + clazz.getSimpleName() + "ServiceImpl.java";
+        generateFileByTemplate(clazz, configuration, serviceImplFilePath, classType.SERVICE_IMPL);
     }
 
     private static void generateService(Class clazz, File file, Configuration configuration) {
@@ -83,6 +89,8 @@ public class DaoCodeGenerate {
             map.put("entityID", getEntityID(clazz));
             map.put("daoID", getDaoID(clazz));
             map.put("dao", getPackageName(clazz, classType.DAO) + "." + getDaoSimpleName(clazz));
+            map.put("service", getPackageName(clazz, classType.SERVICE) + "." + getServiceSimpleName(clazz));
+            map.put("serviceSimple", getServiceSimpleName(clazz));
             map.put("entityFields", clazz.getDeclaredFields());
             Writer writer = new OutputStreamWriter(new FileOutputStream(file));
             try {
@@ -94,6 +102,10 @@ public class DaoCodeGenerate {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static String getServiceSimpleName(Class clazz) {
+        return clazz.getSimpleName()+"Service";
     }
 
     private static void generateDaoTest(Class clazz, File sourceDirectory, Configuration configuration) {
@@ -133,6 +145,8 @@ public class DaoCodeGenerate {
                 return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.DAO.toString().toLowerCase()));
             case SERVICE_TEST:
                 return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.toString().toLowerCase()));
+            case SERVICE_IMPL:
+                return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.SERVICE.toString().toLowerCase())+".impl");
             default:
                 return clazz.getName().replaceAll(originPackage, "." + underlineToHump(classType.toString().toLowerCase()));
         }
